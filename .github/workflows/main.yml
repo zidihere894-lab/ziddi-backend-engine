@@ -1,24 +1,21 @@
 name: Ziddi Engine Runner
 
 on:
-  schedule:
-    - cron: '*/5 * * * *' # Har 5 minute baad engine khud chalega
   workflow_dispatch: # Manual button ke liye
+  schedule:
+    - cron: '*/5 * * * *' # Har 5 min baad auto chalega
 
 jobs:
   run-ziddi:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Install Dependencies
+      - name: Install Libs
         run: pip install firebase-admin requests
-
-      - name: Execute Ziddi Engine
+      - name: Execute Engine
+        env:
+          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }} # Yeh line sabse zaroori hai
         run: python main.py
